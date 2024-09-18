@@ -92,6 +92,11 @@ class BorderQuad extends Visual {
 		background.destroy();
 		background = null;
 	}
+	
+	public function clipBackground(top:Float, bot:Float, left:Float, right:Float) {
+		if (background == null) return;
+		background.frame(left, top, right - left, bot - top);
+	}
 
 	function activateGradientBackground() {
 		this.deactivateBackground();

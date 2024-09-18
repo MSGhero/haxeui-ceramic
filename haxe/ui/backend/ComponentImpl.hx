@@ -300,6 +300,7 @@ class ComponentImpl extends ComponentBase {
 	var imgCache:Map<String, Texture> = [];
 
 	private override function applyStyle(style:Style) {
+		
 		if (style == null) {
 			return;
 		}
@@ -395,11 +396,38 @@ class ComponentImpl extends ComponentBase {
 			visual.border_alpha = style.borderOpacity;
 		}
 
-		var sliceTop = style.backgroundImageSliceTop != null;
-		var sliceLeft = style.backgroundImageSliceLeft != null;
-		var sliceBottom = style.backgroundImageSliceBottom != null;
-		var sliceRight = style.backgroundImageSliceRight != null;
-
+		if (style.backgroundImage != null) {
+			
+			var texture = null;
+			
+			if (imgCache.exists(style.backgroundImage)) {
+				texture = imgCache.get(style.backgroundImage);
+			} else {
+				ImageLoader.instance.load(style.backgroundImage, function(image:ImageInfo) {
+					if (image == null) {
+						trace(
+							'[haxeui-ceramic] image ${style.backgroundImage} could not be loaded'
+						);
+						return;
+					}
+					texture = image.data;
+					imgCache.set(style.backgroundImage, image.data);
+					trace('saved image');
+				});
+			}
+			
+			visual.texture = texture;
+			
+			if (style.backgroundImageClipTop != null && style.backgroundImageClipBottom != null && style.backgroundImageClipLeft != null && style.backgroundImageClipRight != null) {
+				visual.clipBackground(style.backgroundImageClipTop, style.backgroundImageClipBottom, style.backgroundImageClipLeft, style.backgroundImageClipRight);
+			}
+			
+			if (style.backgroundImageSliceTop != null && style.backgroundImageSliceBottom != null && style.backgroundImageSliceLeft != null && style.backgroundImageSliceRight != null) {
+				
+			}
+		}
+		
+		/*
 		if (style.backgroundImage != null && (sliceTop || sliceLeft || sliceBottom || sliceRight)) {
 			var topSlice = style.backgroundImageSliceTop;
 			var botSlice = style.backgroundImageSliceBottom;
@@ -438,6 +466,7 @@ class ComponentImpl extends ComponentBase {
 				trace(topSlice, botSlice, leftSlice, rightSlice);
 			}
 		}
+		*/
 
 		this.updateRender();
 	}
