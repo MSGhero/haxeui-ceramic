@@ -418,55 +418,21 @@ class ComponentImpl extends ComponentBase {
 			
 			visual.texture = texture;
 			
+			if (width == 0 && height == 0) {
+				width = texture.width;
+				height = texture.height;
+			}
+			
 			if (style.backgroundImageClipTop != null && style.backgroundImageClipBottom != null && style.backgroundImageClipLeft != null && style.backgroundImageClipRight != null) {
 				visual.clipBackground(style.backgroundImageClipTop, style.backgroundImageClipBottom, style.backgroundImageClipLeft, style.backgroundImageClipRight);
 			}
 			
 			if (style.backgroundImageSliceTop != null && style.backgroundImageSliceBottom != null && style.backgroundImageSliceLeft != null && style.backgroundImageSliceRight != null) {
-				
-			}
-		}
-		
-		/*
-		if (style.backgroundImage != null && (sliceTop || sliceLeft || sliceBottom || sliceRight)) {
-			var topSlice = style.backgroundImageSliceTop;
-			var botSlice = style.backgroundImageSliceBottom;
-			var leftSlice = style.backgroundImageSliceLeft;
-			var rightSlice = style.backgroundImageSliceRight;
-
-			// var obj:NineSlice;
-			if (!visual.isSlice) {
-				var texture = null;
-				if (imgCache.exists(style.backgroundImage)) {
-					texture = imgCache.get(style.backgroundImage);
-					visual.setNineSlice(texture, topSlice, botSlice, leftSlice, rightSlice);
-				} else {
-					ImageLoader.instance.load(style.backgroundImage, function(image:ImageInfo) {
-						if (image == null) {
-							trace(
-								'[haxeui-ceramic] image ${style.backgroundImage} could not be loaded'
-							);
-							return;
-						}
-						texture = image.data;
-						visual.setNineSlice(texture, topSlice, botSlice, leftSlice, rightSlice);
-						imgCache.set(style.backgroundImage, image.data);
-
-						trace('saved image');
-					});
+				if (!visual.isSlice) {
+					visual.setNineSlice(texture, style.backgroundImageSliceTop, texture.height - style.backgroundImageSliceBottom, style.backgroundImageSliceLeft, texture.width - style.backgroundImageSliceRight);
 				}
 			}
-
-			if (sliceTop && sliceLeft && sliceBottom && sliceRight) {
-				visual.setSlice(topSlice, botSlice, leftSlice, rightSlice);
-				// visual.setSlicePos(leftSlice, topSlice);
-				// visual.setSliceSize(rightSlice, botSlice);
-				trace(topSlice, botSlice, leftSlice, rightSlice);
-			} else {
-				trace(topSlice, botSlice, leftSlice, rightSlice);
-			}
 		}
-		*/
 
 		this.updateRender();
 	}

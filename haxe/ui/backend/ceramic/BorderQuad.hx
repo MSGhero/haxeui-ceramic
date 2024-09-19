@@ -149,6 +149,7 @@ class BorderQuad extends Visual {
 
 		activateSliceBackground();
 		sliceBackground.texture = texture;
+		if (width != 0 && height != 0) sliceBackground.size(width, height); // don't use texture dimensions if w/h are already set
 		setSlice(top, bot, left, right);
 	}
 
