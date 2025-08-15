@@ -200,7 +200,7 @@ class ComponentImpl extends ComponentBase {
 		if (show != this.visual.visible) {
 			this.visual.visible = show;
 			this.visual.touchable = show;
-			this.visual.active = show;
+			// this.visual.active = show;
 		}
 	}
 
@@ -950,7 +950,7 @@ class ComponentImpl extends ComponentBase {
 		var listener = this.eventMap[type];
 		var hittest = this.hitTest(x, y);
 		// trace(hittest);
-		if (hittest && !this.hasComponentOver(cast this, x, y)) {
+		if (hittest) {
 			listener(event);
 			over = true;
 			if (style != null && style.cursor != null && (this is InteractiveComponent)) {
@@ -1000,7 +1000,7 @@ class ComponentImpl extends ComponentBase {
 		}
 
 		var listener = this.eventMap[type];
-		if (this.hitTest(x, y) && !this.hasComponentOver(cast this, x, y)) {
+		if (this.hitTest(x, y)) {
 			listener(event);
 		}
 	}
@@ -1039,7 +1039,7 @@ class ComponentImpl extends ComponentBase {
 		event.screenY = y;
 
 		var listener = this.eventMap[type];
-		if (this.hitTest(x, y) && !this.hasComponentOver(cast this, x, y)) {
+		if (this.hitTest(x, y)) {
 			Cursor.lock = true;
 			listener(event);
 		}
@@ -1049,10 +1049,6 @@ class ComponentImpl extends ComponentBase {
 		var type = MouseEvent.MOUSE_WHEEL;
 		var screen = App.app.screen;
 		if (!this.eventMap.exists(type)) {
-			return;
-		}
-
-		if (this.hasComponentOver(cast this, screen.pointerX, screen.pointerY)) {
 			return;
 		}
 
@@ -1122,7 +1118,7 @@ class ComponentImpl extends ComponentBase {
 		event.screenX = x;
 		event.screenY = y;
 		event.shiftKey = App.app.input.keyPressed(LSHIFT) || App.app.input.keyPressed(RSHIFT);
-		if (this.hitTest(x, y) && !this.hasComponentOver(cast this, x, y)) {
+		if (this.hitTest(x, y)) {
 			this.eventMap[type](event);
 		}
 	}
